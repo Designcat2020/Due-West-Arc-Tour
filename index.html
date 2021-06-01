@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Demo: Add points to a web map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoieWFuc3VuMjAyMCIsImEiOiJjazg4dmFsbGcwMGcwM2xxc2Zla21zZG91In0.Kkqjs0MWxmSEeqe7yO-k5g';
+      var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/yansun2020/ckpc3gfmb14zk17mpeon3w9us',
+        center: [-104.9653, 39.7348],
+        zoom: 8
+      });
+
+      map.on('click', function (e) {
+        var features = map.queryRenderedFeatures(e.point, {
+          layers: ['trip-map']
+        });
+        if (!features.length) {
+          return;
+        }
+        var feature = features[0];
+
+        var popup = new mapboxgl.Popup({ offset: [0, -15] })
+          .setLngLat(feature.geometry.coordinates)
+          .setHTML(
+            '<h3>' +
+              feature.properties.name +
+              '</h3>' +
+              '<p>' +
+              feature.properties.img +
+              '</p>'+
+              '<p>' +
+              feature.properties.address +
+              '</p>'+
+              '<p>' +
+              feature.properties.description +
+              '</p>' 
+              
+          )
+          .addTo(map);
+      });
+    </script>
+  </body>
+</html>
